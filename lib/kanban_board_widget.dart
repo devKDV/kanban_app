@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:appflowy_board/appflowy_board.dart';
 import 'package:flutter/material.dart';
 import 'package:kanban_app/text_card_widget.dart';
-import 'package:kanban_app/text_item_model.dart';
+import 'package:kanban_app/models.dart';
 
 class KanbanBoardWidget extends StatefulWidget {
   const KanbanBoardWidget({super.key});
@@ -17,48 +19,59 @@ class _KanbanBoardWidgetState extends State<KanbanBoardWidget> {
   @override
   void initState() {
     super.initState();
-
     boardController = AppFlowyBoardScrollController();
-    final group1 = AppFlowyGroupData(
-      id: "1",
-      name: "Стадия 1",
-      items: [
-        TextItemModel(
-          idDeal: 1,
-          title: 'Сделка 1',
-          date: '15 мая',
-          manager: 'Иванов И.И.',
-        ),
-        TextItemModel(
-          idDeal: 2,
-          title: 'Сделка 2',
-          date: '23 апреля',
-          manager: 'Петров П.П.',
-        ),
-        TextItemModel(
-          idDeal: 3,
-          title: 'Сделка 3',
-          date: '01 июня',
-          manager: 'Сидоров С.С.',
-        ),
-      ],
-    );
 
-    final group2 = AppFlowyGroupData(
-      id: "2",
-      name: "Стадия 2",
-      items: [
-        TextItemModel(
-          idDeal: 4,
-          title: 'Сделка 4',
-          date: '05 июля',
-          manager: 'Кузнецов К.К.',
-        ),
-      ],
-    );
+    String jsonData = '''
+    {
+      "stages": [
+        {
+          "id": 1,
+          "title": "Стадия 1",
+          "deals": [
+            {
+              "id": 1,
+              "title": "Сделка 1",
+              "date": "15 мая",
+              "manager": "Иванов И.И."
+            },
+            {
+              "id": 2,
+              "title": "Сделка 2",
+              "date": "23 апреля",
+              "manager": "Петров П.П."
+            },
+            {
+              "id": 3,
+              "title": "Сделка 3",
+              "date": "01 июня",
+              "manager": "Сидоров С.С."
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Стадия 2",
+          "deals": [
+            {
+              "id": 4,
+              "title": "Сделка 4",
+              "date": "05 июля",
+              "manager": "Кузнецов К.К."
+            }
+          ]
+        }
+      ]
+    }
+    ''';
 
-    controller.addGroup(group1);
-    controller.addGroup(group2);
+    Map<String, dynamic> jsonMap = jsonDecode(jsonData);
+    List<StageModel> stages = (jsonMap['stages'] as List)
+        .map((stageJson) => StageModel.fromJson(stageJson))
+        .toList();
+
+    for (var stage in stages) {
+      controller.addGroup(StageModelAdapter(stage));
+    }
   }
 
   @override
@@ -113,6 +126,8 @@ class _KanbanBoardWidgetState extends State<KanbanBoardWidget> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   height: 55,
                   margin: config.groupBodyPadding,
@@ -139,8 +154,8 @@ class _KanbanBoardWidgetState extends State<KanbanBoardWidget> {
   }
 
   Widget _buildCard(AppFlowyGroupItem item) {
-    if (item is TextItemModel) {
-      return TextCardWidget(item: item);
+    if (item is DealModelAdapter) {
+      return TextCardWidget(item: item.deal);
     }
 
     throw UnimplementedError();

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kanban_app/kanban_board_widget.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(const MyApp());
+  initializeDateFormatting().then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
+      locale: const Locale('ru'),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(

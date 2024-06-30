@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kanban_app/text_item_model.dart';
+import 'package:intl/intl.dart';
+import 'package:kanban_app/models.dart';
 
 class TextCardWidget extends StatelessWidget {
-  final TextItemModel item;
+  final DealModel item;
   const TextCardWidget({
-    required this.item,
     super.key,
+    required this.item,
   });
 
   @override
@@ -24,10 +25,12 @@ class TextCardWidget extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
             const SizedBox(height: 30),
             Text(
-              item.date,
+              DateFormat('dd MMMM', 'ru').format(item.date),
               style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
             ),
             Text(
