@@ -1,16 +1,18 @@
-# kanban_app
+# Kanban App
+___
+### Описание:
+Мобильное приложение канбан-доски на Flutter. Представляет из себя экран с возможностью перетаскивания карточек сделок между двумя стадиями.
 
-A new Flutter project.
+### Особенности:
+- Визуальное представление данных в виде канбан-доски с двумя стадиями
+- Поддержка перетаскивания карточек сделок между стадиями
+- Использование Bloc для управления состоянием
 
-## Getting Started
+### Установка:
+- Клонируйте репозиторий
+- Установите зависимости командой `flutter pub get`
+- Запустите приложение командой `flutter run`
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Иллюстрации:
+![Иллюстрация к проекту](https://github.com/devKDV/kanban_app/raw/main/image/gif_app.gif)
+___
