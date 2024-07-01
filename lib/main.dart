@@ -1,41 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:kanban_app/features/kanban/data/data_sources/kanban_data_source.dart';
+import 'package:kanban_app/features/kanban/data/repositories/kanban_repository.dart';
+import 'package:kanban_app/features/kanban/domain/use_cases/get_kanban_data.dart';
+import 'package:kanban_app/features/kanban/presentation/bloc/kanban_bloc.dart';
+import 'package:kanban_app/features/kanban/presentation/pages/kanban_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  final kanbanDataSource = KanbanDataSource();
+  final kanbanRepository = KanbanRepositoryImpl(kanbanDataSource);
+  final getKanbanData = GetKanbanData(kanbanRepository);
+
+  initializeDateFormatting()
+      .then((_) => runApp(MyApp(getKanbanData: getKanbanData)));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo'),
-    );
-  }
-}
+  final GetKanbanData getKanbanData;
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyApp({
+    super.key,
+    required this.getKanbanData,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Start'),
-          ],
+    return BlocProvider(
+      create: (context) => KanbanBloc(getKanbanData),
+      child: MaterialApp(
+        theme: ThemeData(
+          colorScheme: const ColorScheme.light(
+            brightness: Brightness.light,
+            primary: Colors.blue,
+          ),
+          useMaterial3: true,
+        ),
+        locale: const Locale('ru'),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Сделки',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          body: const KanbanBoardWidget(),
         ),
       ),
     );
