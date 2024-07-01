@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kanban_app/models.dart';
+import 'package:kanban_app/features/kanban/domain/entities/deal_entity.dart';
 
 class TextCardWidget extends StatelessWidget {
-  final DealModel item;
+  final DealEntity item;
   const TextCardWidget({
     super.key,
     required this.item,
